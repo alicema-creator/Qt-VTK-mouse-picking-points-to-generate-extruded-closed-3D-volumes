@@ -52,41 +52,6 @@
 #include <vtkDelaunay2D.h>
 #include <vtkLinearExtrusionFilter.h>
 #include <vtkPolygon.h>
-
-namespace {
-
-    // Handle mouse events
-    class MouseInteractorStyle2 : public vtkInteractorStyleTrackballCamera
-    {
-    public:
-
-        static MouseInteractorStyle2* New();
-        vtkTypeMacro(MouseInteractorStyle2, vtkInteractorStyleTrackballCamera);
-        vtkNew<vtkNamedColors> colors;
-        virtual void OnLeftButtonDown() override
-        {
-            if (!pickingModeActive)
-            {
-                int* clickPos = this->GetInteractor()->GetEventPosition();
-                vtkNew<vtkPropPicker> picker;
-                picker->Pick(clickPos[0], clickPos[1], 0, this->GetDefaultRenderer());
-                double* pos = picker->GetPickPosition();
-                std::cout << "Pick position (world coordinates) is: " << pos[0] << " "
-                    << pos[1] << " " << pos[2] << std::endl;
-                  double* newPoint = new double[3];
-                  newPoint[0] = pos[0];
-                  newPoint[1] = pos[1];
-                  newPoint[2] = pos[2];
-                  collectedPoints.push_back(newPoint);
-                auto pickedActor = picker->GetActor();
-                if (pickedActor == nullptr)
-                {
-                    std::cout << "No actor picked." << std::endl;
-                }
-             
-} // namespace
-
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
